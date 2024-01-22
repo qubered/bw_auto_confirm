@@ -14,4 +14,4 @@ To get started make a env file with the following values
 And create a folder to access the logs
 
 Then run:
-```docker run --env-file ./env-file -v (YOUR-LOGS-FOLDER):/logs qubered bw_auto_confirm```
+```docker run --env-file ./env-file -v (YOUR-LOGS-FOLDER):/logs qubered/bw_auto_confirm```
