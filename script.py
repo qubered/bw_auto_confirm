@@ -1,4 +1,4 @@
-## BW auto approve v1
+## BW auto approve v2
 
 import subprocess
 import json
@@ -13,7 +13,7 @@ bw_env_server = os.environ["BW_CONFIGSERVER"]
 bw_env_orgid = os.environ["BW_ORGID"]
 
 logger.add("logs/bw_confirm_{time}",format="{time} {level} {message}")
-logger.info("LOGGER STARTED")
+logger.info("LOGGER STARTED: Code v2")
 
 server_set = subprocess.check_output("./bw config server "+bw_env_server,shell=True)
 server_set = server_set.decode("utf-8")
@@ -45,9 +45,12 @@ while True:
 
     for member in members:
         if member['status'] == 1:
-            res = subprocess.check_output("./bw confirm --session "+session_id+" org-member "+member['id']+" --organizationid "+bw_env_orgid, shell=True)
-            logger.info("Confirmed User: "+member['name']+" "+member['email']+" To Bitwarden")
-            approval = True
+            try:
+                res = subprocess.check_output("./bw confirm --session "+session_id+" org-member "+member['id']+" --organizationid "+bw_env_orgid, shell=True)
+                logger.info("Confirmed User: "+member['name']+" "+member['email']+" To Bitwarden")
+                approval = True
+            except Exception as error:
+                logger.DEBUG("ERROR APPROVING: "+member['name']+"Error: "+error)
     if not approval:
         logger.info("Script Finished! No users to approve")
     if approval:
